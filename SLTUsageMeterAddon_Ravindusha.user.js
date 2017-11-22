@@ -140,6 +140,26 @@
     var elementParent = element.parentNode;
     elementParent.insertBefore(outerRow, element.nextSibling);
 
+    // calculate data buffer
+
+    function daysInThisMonth() {
+        var now = new Date();
+        return new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    }
+
+    var remainDays = (daysInThisMonth() - (new Date()).getDate());
+    var perDayGB = peakVol / daysInThisMonth();
+    var neededGB = perDayGB * remainDays;
+    var peakRemainGB = parseFloat(document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML);
+    var bufferGB = Math.round((peakRemainGB - neededGB)*10)/10;
+    var red = "";
+    var h4 = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-4.right-pane > div > div > h4");
+    var totalDIV = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-7 > div:nth-child(1)");
+
+    if (bufferGB < 0){ red = "color:red;";}
+
+    h4.innerHTML = "<span style='font-size:35px;" + red + "'>Buffer: " + bufferGB + " GB</span>";
+    totalDIV.style.display = 'none';
 
 
 })();
