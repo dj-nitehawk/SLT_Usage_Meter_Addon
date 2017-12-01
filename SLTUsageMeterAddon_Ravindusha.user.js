@@ -151,7 +151,7 @@
     var perDayGB = peakVol / daysInThisMonth();
     var neededGB = perDayGB * remainDays;
     var peakRemainGB = parseFloat(document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML);
-    var bufferGB = Math.round((peakRemainGB - neededGB)*10)/10;
+    var bufferGB = (peakRemainGB - neededGB).toFixed(2);
     var red = "";
     var h4 = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-4.right-pane > div > div > h4");
     var totalDIV = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-7 > div:nth-child(1)");
