@@ -147,7 +147,7 @@
         return new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
     }
 
-    var remainDays = (daysInThisMonth() - (new Date()).getDate());
+    var remainDays = ((daysInThisMonth()+1) - (new Date()).getDate());
     var perDayGB = peakVol / daysInThisMonth();
     var neededGB = perDayGB * remainDays;
     var peakRemainGB = parseFloat(document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML);
