@@ -152,13 +152,18 @@
     var neededGB = perDayGB * remainDays;
     var peakRemainGB = parseFloat(document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML);
     var bufferGB = (peakRemainGB - neededGB).toFixed(2);
-    var red = "";
     var h4 = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-4.right-pane > div > div > h4");
     var totalDIV = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-7 > div:nth-child(1)");
+    var color = "";
 
-    if (bufferGB < 0){ red = "color:red;";}
+    if (bufferGB < 0-perDayGB){
+        color = "red";
+    }
+    if (bufferGB > 0-perDayGB && bufferGB < 0){
+        color = "green";
+    }
 
-    h4.innerHTML = "<span style='font-size:35px;" + red + "'>Buffer: " + bufferGB + " GB</span>";
+    h4.innerHTML = "<span style='font-size:35px; color:" + color + ";'>Buffer: " + bufferGB + " GB</span>";
     totalDIV.style.display = 'none';
 
 
