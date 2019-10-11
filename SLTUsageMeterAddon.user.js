@@ -4,168 +4,52 @@
 // @version      2.1
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
-// @match        https://internetvas.slt.lk/SLTVasPortal-war/application/home.nable
+// @match        https://internetvas.slt.lk/dashboard
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    var totalText = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(1) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML;
-    var total = parseFloat(totalText);
+    setTimeout(function(){
+        
+        function daysInThisMonth() {
+            var now = new Date();
+            return new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+        }
+        
+        var peakElement = document.querySelector("#root > div > div > div:nth-child(3) > div > div > div > div:nth-child(3) > div.col-md-8 > div > div:nth-child(1) > div > div > div > div:nth-child(1) > div > div > div:nth-child(4) > h6");
+        var peakTotalGB = parseFloat(peakElement.innerHTML.split(" ")[5].replace("GB","").replace(" ",""));
+        var peakUsedGB = parseFloat(peakElement.innerHTML.split(" ")[2].split(">")[2].replace("GB",""));
+        var totalElement = document.querySelector("#root > div > div > div:nth-child(3) > div > div > div > div:nth-child(3) > div.col-md-8 > div > div:nth-child(1) > div > div > div > div:nth-child(2) > div > div > div:nth-child(4) > h6");
+        var totalUsedGB = parseFloat(totalElement.innerHTML.split(" ")[2].split(">")[2].replace("GB",""));
+        var totalGB = parseFloat(totalElement.innerHTML.split(" ")[5].replace("GB",""));
+        var targetElement = document.querySelector("#root > div > div > div:nth-child(3) > div > div > div > div:nth-child(3) > div.col-md-8 > div > div:nth-child(1) > div > h2");
 
-    var peakText = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML;
-    var peak = parseFloat(peakText);
+        var totalRemainGB = (totalGB - totalUsedGB);
+        var peakRemainGB = (peakTotalGB - peakUsedGB);
+        var offPeakTotalGB = (totalGB - peakTotalGB);
+        var offPeakUsedGB = (totalUsedGB - peakUsedGB);
+        var offPeakRemainGB = (totalRemainGB - peakRemainGB);
+        var remainDays = ((daysInThisMonth()+1) - (new Date()).getDate());
+        var perDayGB = (peakTotalGB / daysInThisMonth());
+        var neededGB = (perDayGB * remainDays);
+        var bufferGB = (peakRemainGB - neededGB);
+        var balanceGB = (parseFloat(perDayGB) + parseFloat(bufferGB));
 
-    var offpeak = Math.round((total-peak)*10)/10;
+        var color = "";
+        if (bufferGB < 0-perDayGB){
+            color = "red";
+        }
+        if (bufferGB > 0-perDayGB && bufferGB < 0){
+            color = "green";
+        }
 
-    ////////////////////////////////////
+        targetElement.innerHTML =
+            "<span style='font-size:35px; color:" + color + ";'>"+
+            "Peak Buffer: " + balanceGB.toFixed(2) + " GB</span><br/>"+
+            "[Peak] Balance: " + peakRemainGB.toFixed(2) + " GB | Total: " + peakTotalGB.toFixed(0) + " GB<br/>"+
+            "[O/Peak] Balance: " + offPeakRemainGB.toFixed(2) + " GB | Total: " + offPeakTotalGB.toFixed(0) + "GB";
 
-    var totalUsedText = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(1) > div > div.row > div:nth-child(3) > h5 > strong").innerHTML;
-    var totalUsed = parseFloat(totalUsedText);
-
-    var peakUsedText = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(3) > h5 > strong").innerHTML;
-    var peakUsed = parseFloat(peakUsedText);
-
-    var offpeakUsed = Math.round((totalUsed-peakUsed)*10)/10;
-
-    ///////////////////////////////////
-
-    var totalVolume = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(1) > div > div.row > div:nth-child(1) > h5 > strong").innerHTML;
-    var totalVol = parseFloat(totalVolume);
-
-    var peakVolume = document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(1) > h5 > strong").innerHTML;
-    var peakVol = parseFloat(peakVolume);
-
-    var offpeakVol = Math.round((totalVol-peakVol)*10)/10;
-
-    ////////////////////////////////////////////
-
-    var element = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-7 > div:nth-child(2)");
-
-    var outerRow = document.createElement("div");
-    outerRow.className = "row";
-    outerRow.setAttribute("style","margin-top: 40px");
-
-    var outerDiv = document.createElement("div");
-    outerDiv.className = "col-md-12";
-
-    var divTitle = document.createElement("h4");
-    divTitle.innerHTML = "Off-Peak Download Volume";
-
-    //Progress-bar////////////////////////////////////
-    var progress = document.createElement('div');
-    progress.className = "progress";
-
-    var progressBar = document.createElement('div');
-    progressBar.className = "progress-bar";
-
-    var percentage = Math.round((offpeak/offpeakVol)*100);
-    progressBar.innerHTML = percentage+"%";
-
-    progressBar.setAttribute("role","progressbar");
-    progressBar.setAttribute("aria-valuenow","50");
-    progressBar.setAttribute("aria-valuemin","0");
-    progressBar.setAttribute("aria-valuemax","100");
-    progressBar.setAttribute("style","width: "+percentage+"%;  background-color: #0D0548  ");
-
-    //Monthly-Limit////////////////////////////////
-    var newElement = document.createElement('div');
-    newElement.className = "row";
-
-    var colmd4_3 = document.createElement("div");
-    colmd4_3.className = "col-md-4";
-
-    var h5_3 = document.createElement("h5");
-    h5_3.className = "progress-label";
-
-    var small_3 = document.createElement("small");
-    small_3.innerHTML = "Monthly limit";
-    var strong_3 = document.createElement("strong");
-    strong_3.innerHTML = offpeakVol+" GB";
-
-    //Remaining-data///////////////////////////////
-    var colmd4 = document.createElement("div");
-    colmd4.className = "col-md-4";
-
-    var h5 = document.createElement("h5");
-    h5.className = "progress-label";
-
-    var small = document.createElement("small");
-    small.innerHTML = "Remaining";
-    var strong = document.createElement("strong");
-    strong.innerHTML = offpeak+" GB";
-    ///////////////////////////////////////////////////////////
-
-
-    //Used data///////////////////////////////////////////////
-
-    var colmd4_2 = document.createElement("div");
-    colmd4_2.className = "col-md-4";
-
-    var h5_2 = document.createElement("h5");
-    h5_2.className = "progress-label";
-
-    var small_2 = document.createElement("small");
-    small_2.innerHTML = "Used";
-    var strong_2 = document.createElement("strong");
-    strong_2.innerHTML = offpeakUsed+" GB";
-    /////////////////////////////////////////////////////////
-
-    h5_3.appendChild(small_3);
-    h5_3.innerHTML += "<br>";
-    h5_3.appendChild(strong_3);
-    colmd4_3.appendChild(h5_3);
-    newElement.appendChild(colmd4_3);
-
-    h5.appendChild(small);
-    h5.innerHTML += "<br>";
-    h5.appendChild(strong);
-    colmd4.appendChild(h5);
-    newElement.appendChild(colmd4);
-
-    h5_2.appendChild(small_2);
-    h5_2.innerHTML += "<br>";
-    h5_2.appendChild(strong_2);
-    colmd4_2.appendChild(h5_2);
-    newElement.appendChild(colmd4_2);
-
-    progress.appendChild(progressBar);
-
-    outerDiv.appendChild(divTitle);
-    outerDiv.appendChild(progress);
-    outerDiv.appendChild(newElement);
-    outerRow.appendChild(outerDiv);
-
-    var elementParent = element.parentNode;
-    elementParent.insertBefore(outerRow, element.nextSibling);
-
-    // calculate data balance for today
-
-    function daysInThisMonth() {
-        var now = new Date();
-        return new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-    }
-
-    var remainDays = ((daysInThisMonth()+1) - (new Date()).getDate());
-    var perDayGB = peakVol / daysInThisMonth();
-    var neededGB = perDayGB * remainDays;
-    var peakRemainGB = parseFloat(document.querySelector("div:nth-child(2) > div.col-md-7 > div:nth-child(2) > div > div.row > div:nth-child(2) > h5 > strong").innerHTML);
-    var bufferGB = (peakRemainGB - neededGB).toFixed(2);
-    var balanceGB = (parseFloat(perDayGB) + parseFloat(bufferGB)).toFixed(2);
-    var h4 = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-4.right-pane > div > div > h4");
-    var totalDIV = document.querySelector("div.col-md-12 > div:nth-child(2) > div.col-md-7 > div:nth-child(1)");
-    var color = "";
-
-    if (bufferGB < 0-perDayGB){
-        color = "red";
-    }
-    if (bufferGB > 0-perDayGB && bufferGB < 0){
-        color = "green";
-    }
-
-    h4.innerHTML = "<span style='font-size:35px; color:" + color + ";'>Balance: " + balanceGB + " GB</span>";
-    totalDIV.style.display = 'none';
-
-
+    }, 2000);
 })();
