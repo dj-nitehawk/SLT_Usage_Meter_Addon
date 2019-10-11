@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SLT Usage Meter
 // @namespace    http://tampermonkey.net/
-// @version      3.0
+// @version      3.1
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
 // @match        https://internetvas.slt.lk/dashboard
@@ -11,13 +11,15 @@
 (function() {
     'use strict';
 
-    setTimeout(function(){
-        
+    var interval = setInterval(myTimer, 500);
+
+    function myTimer(){
+
         function daysInThisMonth() {
             var now = new Date();
             return new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
         }
-        
+
         var peakElement = document.querySelector("#root > div > div > div:nth-child(3) > div > div > div > div:nth-child(3) > div.col-md-8 > div > div:nth-child(1) > div > div > div > div:nth-child(1) > div > div > div:nth-child(4) > h6");
         var peakTotalGB = parseFloat(peakElement.innerHTML.split(" ")[5].replace("GB","").replace(" ",""));
         var peakUsedGB = parseFloat(peakElement.innerHTML.split(" ")[2].split(">")[2].replace("GB",""));
@@ -51,5 +53,6 @@
             "[Peak] Balance: " + peakRemainGB.toFixed(2) + " GB | Total: " + peakTotalGB.toFixed(0) + " GB<br/>"+
             "[O/Peak] Balance: " + offPeakRemainGB.toFixed(2) + " GB | Total: " + offPeakTotalGB.toFixed(0) + "GB";
 
-    }, 2000);
+        clearInterval(interval);
+    }
 })();
