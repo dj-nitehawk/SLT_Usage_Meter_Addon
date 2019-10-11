@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SLT Usage Meter
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      3.0
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
 // @match        https://internetvas.slt.lk/dashboard
