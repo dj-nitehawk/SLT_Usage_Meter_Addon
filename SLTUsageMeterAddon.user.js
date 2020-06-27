@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         SLT Usage Meter
-// @namespace    http://tampermonkey.net/
-// @version      3.1
+// @version      3.2
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
 // @match        https://internetvas.slt.lk/dashboard
-// @grant        none
+// @updateURL    https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.user.js
+// @downloadURL  https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.user.js
 // ==/UserScript==
 
 (function() {
@@ -48,10 +48,12 @@
         }
 
         targetElement.innerHTML =
+            "<div style='text-align:center'>"+
             "<span style='font-size:35px; color:" + color + ";'>"+
             "Peak Buffer: " + balanceGB.toFixed(2) + " GB</span><br/>"+
-            "[Peak] Balance: " + peakRemainGB.toFixed(2) + " GB | Total: " + peakTotalGB.toFixed(0) + " GB<br/>"+
-            "[O/Peak] Balance: " + offPeakRemainGB.toFixed(2) + " GB | Total: " + offPeakTotalGB.toFixed(0) + "GB";
+            "Peak Balance: " + peakRemainGB.toFixed(2) + " GB | Total: " + peakTotalGB.toFixed(0) + " GB<br/>"+
+            "Off-Peak Balance: " + offPeakRemainGB.toFixed(2) + " GB | Total: " + offPeakTotalGB.toFixed(0) + "GB"+
+            "</div>";
 
         clearInterval(interval);
     }
