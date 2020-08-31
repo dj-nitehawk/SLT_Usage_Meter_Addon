@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         SLT Usage Meter
-// @version      3.3
+// @version      3.4
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
 // @match        https://internetvas.slt.lk/dashboard
@@ -56,14 +56,14 @@
 
     if (totalElement) {
       peakLabel = "Peak ";
-      offPeakLabel = "Off-Peak Balance: " + offPeakRemainGB.toFixed(2) + " GB of Total: " + offPeakTotalGB.toFixed(0) + "GB";
+      offPeakLabel = "Off-Peak Balance: " + offPeakRemainGB.toFixed(2) + " GB | Total: " + offPeakTotalGB.toFixed(0) + "GB";
     }
 
     targetElement.innerHTML =
       "<div style='text-align:center;border: 1px solid #e6e6e6;box-shadow: 3px 5px 10px 0px #9e9e9e;background-color: #f3f3f3;border-radius: 18px;padding: 10px;'>" +
       "<span style='font-size:35px; color:" + color + ";'>" +
       peakLabel + "Buffer: " + balanceGB.toFixed(2) + " GB</span><br/>" +
-      peakLabel + "Balance: " + peakRemainGB.toFixed(2) + " GB of Total: " + peakTotalGB.toFixed(0) + " GB<br/>" +
+      peakLabel + "Balance: " + peakRemainGB.toFixed(2) + " GB | Total: " + peakTotalGB.toFixed(0) + " GB<br/>" +
       offPeakLabel +
       "</div>";
 
