@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         SLT Usage Meter
-// @version      4.1
+// @version      4.1.1
 // @description  Calculate off peak data
 // @author       dj-NiteHawk
 // @match        https://myslt.slt.lk/boardBand/summary
-// @updateURL    https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.user.js
-// @downloadURL  https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.user.js
+// @updateURL    https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.js
+// @downloadURL  https://github.com/dj-nitehawk/SLT_Usage_Meter_Addon/raw/master/SLTUsageMeterAddon.js
 // ==/UserScript==
 
 (function () {
